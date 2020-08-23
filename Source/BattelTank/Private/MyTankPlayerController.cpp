@@ -8,8 +8,25 @@ ATank* AMyTankPlayerController::GetControlledTank() const {
 }
 
 void AMyTankPlayerController::AimTowardsCrosshair(){
-	UE_LOG(LogTemp, Warning, TEXT("Tick of my tank controller"));
+	if(!GetControlledTank()){
+		return ; // If not found the tank 
+	}
+	FVector HitLocation;
+	if(GetSightRayHitLocation(HitLocation)){
+		// UE_LOG(LogTemp, Warning, TEXT("Hit location: %s"), *HitLocation.ToString());
+	}
+
 }
+
+bool AMyTankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const{
+	OutHitLocation = FVector(1.0);
+	int32 screenXLocation, screenYLocation;
+	GetViewportSize(screenXLocation, screenYLocation);
+	auto screenSizeLocation = FVector2D(screenXLocation * crossHairXLocation, screenYLocation * crossHairYLocation);
+	UE_LOG(LogTemp, Warning, TEXT("Screen location: %s"), *screenSizeLocation.ToString());
+	return true;
+}
+
 
 
 void AMyTankPlayerController::BeginPlay() {
@@ -25,8 +42,6 @@ void AMyTankPlayerController::BeginPlay() {
 
 void AMyTankPlayerController::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
-	// AimTowardsCrosshair();
-
-	UE_LOG(LogTemp, Warning, TEXT("Tick of my tank controller"));
+	 AimTowardsCrosshair();
 
 }

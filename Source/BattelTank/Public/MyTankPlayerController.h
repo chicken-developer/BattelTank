@@ -19,7 +19,14 @@ public:
 	
     virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	
+	UPROPERTY(EditAnywhere)
+	float crossHairXLocation = 0.5;
 
+	UPROPERTY(EditAnywhere)
+	float crossHairYLocation = 0.3333;
 private:
 	void AimTowardsCrosshair();
+	bool GetSightRayHitLocation(FVector &OutHitLocation) const;
+	FVector GetHitLocation();
 };
