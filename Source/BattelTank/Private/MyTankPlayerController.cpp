@@ -11,22 +11,50 @@ void AMyTankPlayerController::AimTowardsCrosshair(){
 	if(!GetControlledTank()){
 		return ; // If not found the tank 
 	}
-	FVector HitLocation;
-	if(GetSightRayHitLocation(HitLocation)){
-		// UE_LOG(LogTemp, Warning, TEXT("Hit location: %s"), *HitLocation.ToString());
+	FVector outHitLocation;
+	if(GetSightRayHitLocation(outHitLocation)){
+		GetControlledTank()->AimAt(outHitLocation);
 	}
 
 }
 
-bool AMyTankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const{
-	OutHitLocation = FVector(1.0);
+bool AMyTankPlayerController::GetSightRayHitLocation(FVector& outHitLocation) const{
 	int32 screenXLocation, screenYLocation;
 	GetViewportSize(screenXLocation, screenYLocation);
 	auto screenSizeLocation = FVector2D(screenXLocation * crossHairXLocation, screenYLocation * crossHairYLocation);
-	UE_LOG(LogTemp, Warning, TEXT("Screen location: %s"), *screenSizeLocation.ToString());
+	FVector  worldDirection;
+	if(GetLookDirection(screenSizeLocation, worldDirection)){
+		GetLookVectorHitLocation(worldDirection, outHitLocation);
+	}
 	return true;
 }
 
+bool AMyTankPlayerController::GetLookDirection(FVector2D screenLocation, FVector& lookDirection) const{
+	FVector CameraWorldLocation;
+	return DeprojectScreenPositionToWorld(
+		screenLocation.X,
+		screenLocation.Y,
+		CameraWorldLocation,
+		lookDirection);
+}
+
+bool AMyTankPlayerController::GetLookVectorHitLocation(FVector lookDirection, FVector &outHitLocation) const{
+	FHitResult hitResult;
+	auto startLocation = PlayerCameraManager->GetCameraLocation();
+	auto endLocation = startLocation + (lookDirection * LineTraceRange);
+
+	if(GetWorld()->LineTraceSingleByChannel(
+		hitResult,
+		startLocation,
+		endLocation,
+		ECollisionChannel::ECC_Visibility)){
+		
+		outHitLocation = hitResult.Location;
+		return true;
+	}
+	outHitLocation = FVector(0);
+	return false;
+}
 
 
 void AMyTankPlayerController::BeginPlay() {

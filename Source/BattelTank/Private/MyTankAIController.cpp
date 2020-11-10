@@ -3,6 +3,23 @@
 
 #include "MyTankAIController.h"
 
+ATank* AMyTankAIController::GetControlledTank() const {
+	return static_cast<ATank*>(GetPawn());
+}
+
+ATank* AMyTankAIController::GetPlayerControlledTank() const {
+	//playerTankController -> that is  player controller, not a tank
+	return static_cast<ATank*> (GetWorld()->GetFirstPlayerController()->GetPawn());
+}
+
+FVector AMyTankAIController::GetPlayerTankLocation() const{
+	if(!GetControlledTank()){
+		return FVector(0);
+	}
+	return GetPlayerControlledTank()->GetActorLocation();
+}
+
+
 void AMyTankAIController::BeginPlay() {
 	Super::BeginPlay();
 	auto controlledTank = GetControlledTank();
@@ -23,13 +40,10 @@ void AMyTankAIController::BeginPlay() {
 	}
 }
 
-
-ATank* AMyTankAIController::GetControlledTank() const {
-	return static_cast<ATank*>(GetPawn());
+void AMyTankAIController::Tick(float DeltaSeconds){
+	Super::Tick(DeltaSeconds);
+	if(!GetControlledTank()){
+		return;
+	}
+	GetControlledTank()->AimAt(GetPlayerTankLocation());
 }
-
-ATank* AMyTankAIController::GetPlayerControlledTank() const{
-	//playerTankController -> that is  player controller, not a tank
-	return static_cast<ATank*> (GetWorld()->GetFirstPlayerController()->GetPawn());
-}
-
