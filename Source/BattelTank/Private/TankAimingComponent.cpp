@@ -3,19 +3,21 @@
 
 #include "TankAimingComponent.h"
 
+
+#include "TankBarrel.h"
 #include "Kismet/GameplayStatics.h"
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* barrelToSet){
-	barrel = barrelToSet;
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* barrelToSet){
+	Barrel = barrelToSet;
 }
 
 
 void UTankAimingComponent::AimAt(FVector worldObjectLocation, float launchSpeed, FString objectName) {
-	if(!barrel){
+	if(!Barrel){
 		return;
 	}
 	FVector OutLaunchVelocity;
-	FVector StartLocation = barrel->GetSocketLocation(FName("Projectile"));
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this,
 		OutLaunchVelocity,
@@ -36,9 +38,13 @@ void UTankAimingComponent::AimAt(FVector worldObjectLocation, float launchSpeed,
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection){
 	//TODO: Move barrel here
-	auto BarrelRotator = barrel->GetForwardVector().Rotation();
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
-	UE_LOG(LogTemp, Warning, TEXT("Aiming as rotator: %s"), *AimAsRotator.ToString());
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
+	UE_LOG(LogTemp, Warning, TEXT("Start call barrel elevate"));
+	Barrel->Elevate(5);
+	UE_LOG(LogTemp, Warning, TEXT("End call barrel elevate"));
+
 }
 
 
