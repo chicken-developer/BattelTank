@@ -3,15 +3,36 @@
 
 #include "TankAimingComponent.h"
 
+#include "Kismet/GameplayStatics.h"
+
 void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* barrelToSet){
 	barrel = barrelToSet;
 }
 
 
-void UTankAimingComponent::AimAt(FVector worldObjectLocation, float lauchSpeed, FString objectName) {
-	auto barrelLocation = barrel->GetComponentLocation().ToString();
-	// UE_LOG(LogTemp, Warning, TEXT("%s from %s aiming at: %s"), *objectName,*barrelLocation, *worldObjectLocation.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("Firing at: %f"), lauchSpeed);
+void UTankAimingComponent::AimAt(FVector worldObjectLocation, float launchSpeed, FString objectName) {
+	if(!barrel){
+		return;
+	}
+	FVector OutLaunchVelocity;
+	FVector StartLocation = barrel->GetSocketLocation(FName("Projectile"));
+
+	if(UGameplayStatics::SuggestProjectileVelocity(
+		this,
+		OutLaunchVelocity,
+		StartLocation,
+		worldObjectLocation,
+		launchSpeed,
+		false,
+		0,
+		0,
+		ESuggestProjVelocityTraceOption::DoNotTrace
+	)){
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		auto TankName = GetOwner()->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s"),*TankName, *AimDirection.ToString());
+	}
+	
 
 }
 
@@ -40,6 +61,7 @@ void UTankAimingComponent::BeginPlay()
 // Called every frame
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+	
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
