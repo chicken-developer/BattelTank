@@ -29,5 +29,6 @@ public:
 	//Default value must be last parameters
 private:
 	UStaticMeshComponent* barrel = nullptr;
-		
+	void MoveBarrelTowards(FVector AimDirection);
+
 };
