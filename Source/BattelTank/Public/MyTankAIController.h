@@ -4,13 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "Tank.h"
-
 #include "MyTankAIController.generated.h"
 
-/**
- * 
- */
+class ATank;
 UCLASS()
 class BATTELTANK_API AMyTankAIController : public AAIController
 {

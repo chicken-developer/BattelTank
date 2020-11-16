@@ -2,6 +2,7 @@
 
 
 #include "MyTankPlayerController.h"
+#include "Tank.h"
 
 ATank* AMyTankPlayerController::GetControlledTank() const {
 	return static_cast<ATank*>(GetPawn());

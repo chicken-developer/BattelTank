@@ -24,6 +24,9 @@ void UTankAimingComponent::AimAt(FVector worldObjectLocation, float launchSpeed,
 		StartLocation,
 		worldObjectLocation,
 		launchSpeed,
+		false,
+		0,
+		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
 	if(bHaveAimSolution){
@@ -31,8 +34,7 @@ void UTankAimingComponent::AimAt(FVector worldObjectLocation, float launchSpeed,
 		auto TankName = GetOwner()->GetName();
 		MoveBarrelTowards(AimDirection);
 		auto Time = GetWorld()->GetTimeSeconds(); // for check if anything is running
-		UE_LOG(LogTemp, Warning, TEXT(" %f: Found solution from TankAimingComponent"), Time);
-		UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s"),*TankName, *AimDirection.ToString());
+		UE_LOG(LogTemp, Warning, TEXT(" %f: Aiming solution found"), Time);
 	} else{
 		auto Time = GetWorld()->GetTimeSeconds(); // for check if anything is running
 		UE_LOG(LogTemp, Warning, TEXT(" %f: No found solution from TankAimingComponent"),Time);
