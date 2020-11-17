@@ -7,6 +7,7 @@
 #include "Tank.generated.h"
 
 class UTankBarrel;
+class UTankTurret;
 class UTankAimingComponent;
 UCLASS()
 class BATTELTANK_API ATank : public APawn
@@ -18,6 +19,9 @@ public:
 	ATank();
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrel* barrelToSet);
+	
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretReference(UTankTurret* turretToSet);
 
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;

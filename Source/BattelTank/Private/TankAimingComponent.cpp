@@ -8,7 +8,17 @@
 #include "Kismet/GameplayStatics.h"
 
 void UTankAimingComponent::SetBarrelReference(UTankBarrel* barrelToSet){
+	if(!barrelToSet){
+		return;
+	}
 	MyTankBarrel = barrelToSet;
+}
+
+void UTankAimingComponent::SetTurretReference(UTankTurret* turretToSet){
+	if(!turretToSet){
+		return;
+	}
+	MyTankTurret = turretToSet;
 }
 
 
