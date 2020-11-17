@@ -8,16 +8,16 @@
 #include "Kismet/GameplayStatics.h"
 
 void UTankAimingComponent::SetBarrelReference(UTankBarrel* barrelToSet){
-	Barrel = barrelToSet;
+	MyTankBarrel = barrelToSet;
 }
 
 
 void UTankAimingComponent::AimAt(FVector worldObjectLocation, float launchSpeed, FString objectName) {
-	if(!Barrel){
+	if(!MyTankBarrel){
 		return;
 	}
 	FVector OutLaunchVelocity;
-	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+	FVector StartLocation = MyTankBarrel->GetSocketLocation(FName("Projectile"));
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this,
 		OutLaunchVelocity,
@@ -46,10 +46,10 @@ void UTankAimingComponent::AimAt(FVector worldObjectLocation, float launchSpeed,
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection){
 	//TODO: Move barrel here
-	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto BarrelRotator = MyTankBarrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
-	Barrel->Elevate(1);
+	MyTankBarrel->Elevate(5);
 }
 
 

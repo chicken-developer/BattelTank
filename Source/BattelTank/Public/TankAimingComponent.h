@@ -29,7 +29,7 @@ public:
 	void AimAt(FVector worldObjectLocation,float lauchSpeed, FString objectName = TEXT(""));
 	//Default value must be last parameters
 private:
-	UTankBarrel* Barrel = nullptr;
+	UTankBarrel* MyTankBarrel = nullptr;
 	void MoveBarrelTowards(FVector AimDirection);
 
 };
