@@ -36,6 +36,6 @@ public:
 	void AimAt(FVector hitLocation);
 private:
 	UPROPERTY(EditAnywhere, Category = Firing)
-	float lauchSpeed = 10000;
+	float lauchSpeed = 4000;
 
 };

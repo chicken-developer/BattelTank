@@ -2,8 +2,7 @@
 
 
 #include "TankAimingComponent.h"
-
-
+#include "TankTurret.h"
 #include "TankBarrel.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -60,6 +59,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection){
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 	MyTankBarrel->Elevate(5);
+	MyTankTurret->Rotate(5);
 }
 
 
