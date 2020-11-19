@@ -20,10 +20,15 @@ void ATank::SetTurretReference(UTankTurret* turretToSet){
 	TankAimingComponent->SetTurretReference(turretToSet);
 }
 
+void ATank::Fire(){	
+	auto Time = GetWorld()->GetTimeSeconds(); // for check if anything is running
+	UE_LOG(LogTemp, Warning, TEXT(" %f: Tank Fire"), Time);
+}
+
+
 void ATank::AimAt(FVector hitLocation){
 	auto tankName = this->GetName();
 	TankAimingComponent->AimAt(hitLocation,lauchSpeed,tankName);
-	// UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s"),*tankName, *hitLocation.ToString());
 }
 
 

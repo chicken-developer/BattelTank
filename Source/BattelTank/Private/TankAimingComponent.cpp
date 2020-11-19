@@ -42,19 +42,10 @@ void UTankAimingComponent::AimAt(FVector worldObjectLocation, float launchSpeed,
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		auto TankName = GetOwner()->GetName();
 		MoveBarrelTowards(AimDirection);
-		auto Time = GetWorld()->GetTimeSeconds(); // for check if anything is running
-		UE_LOG(LogTemp, Warning, TEXT(" %f: Aiming solution found"), Time);
-	} else{
-		auto Time = GetWorld()->GetTimeSeconds(); // for check if anything is running
-		UE_LOG(LogTemp, Warning, TEXT(" %f: No found solution from TankAimingComponent"),Time);
-
 	}
-	
-
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection){
-	//TODO: Move barrel here
 	auto BarrelRotator = MyTankBarrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
