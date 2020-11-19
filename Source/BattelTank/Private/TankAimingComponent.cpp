@@ -20,7 +20,6 @@ void UTankAimingComponent::SetTurretReference(UTankTurret* turretToSet){
 	MyTankTurret = turretToSet;
 }
 
-
 void UTankAimingComponent::AimAt(FVector worldObjectLocation, float launchSpeed, FString objectName) {
 	if(!MyTankBarrel){
 		return;
@@ -40,47 +39,36 @@ void UTankAimingComponent::AimAt(FVector worldObjectLocation, float launchSpeed,
 	);
 	if(bHaveAimSolution){
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		auto TankName = GetOwner()->GetName();
 		MoveBarrelTowards(AimDirection);
 	}
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection){
+	if (!MyTankBarrel) {
+		return;
+	}
 	auto BarrelRotator = MyTankBarrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
-	MyTankBarrel->Elevate(5);
-	MyTankTurret->Rotate(5);
+	MyTankBarrel->Elevate(DeltaRotator.Pitch);
+	if (FMath::Abs(DeltaRotator.Yaw) < 180) {
+		MyTankTurret->Rotate(DeltaRotator.Yaw);
+	} else {
+		MyTankTurret->Rotate(-DeltaRotator.Yaw);
+	}
 }
 
 
 // Sets default values for this component's properties
-UTankAimingComponent::UTankAimingComponent()
-{
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+UTankAimingComponent::UTankAimingComponent(){
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
+void UTankAimingComponent::BeginPlay(){
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction){
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
